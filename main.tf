@@ -5,11 +5,13 @@ locals {
 }
 
 resource "aws_s3_bucket" "target" {
+  count = var.create_bucket ? 1 : 0
+  
   bucket = var.bucket_name
 }
 
 data "aws_s3_bucket" "target" {
-  bucket = var.create_bucket ? aws_s3_bucket.target.id : var.bucket_name
+  bucket = var.create_bucket ? aws_s3_bucket.target[0].id : var.bucket_name
 }
 
 resource "aws_s3_object" "test" {
